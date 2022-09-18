@@ -1,0 +1,6 @@
+{
+  "t0": 0.0,
+  "t_final": 2,
+  "initial_alpha": 1e-14,
+  "csv_delimiter": "\t"
+}
