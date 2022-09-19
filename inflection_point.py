@@ -4,25 +4,26 @@ import scipy.optimize as optimize
 
 from sigmoid_calculation import get_sigmoid
 
-DELTA_DER = 5e-5
+DELTA_DER = 1e-2
 
 
 def equation(t, sigmoid):
     dt = DELTA_DER
-    return ((sigmoid(t + dt) - 2 * sigmoid(t) + sigmoid(t - dt)) / (dt ** 2))[0]
-
+    return np.squeeze((-sigmoid(t+2*dt)+16*sigmoid(t+dt)-30*sigmoid(t)+16*sigmoid(t-dt)-sigmoid(t-2*dt))/(12*(dt**2)))
+    # return ((sigmoid(t + dt) - 2 * sigmoid(t) + sigmoid(t - dt)) / (dt ** 2))[0]
 
 def find_inflection(sigmoid):
     # run a global optimizer to find a fitting initial cond
     anneal = optimize.dual_annealing(lambda x, sigmoid: equation(x, sigmoid) ** 2,
                                      args=(sigmoid,),
                                      # bounds=((sigmoid.t_min + 1 * DELTA_DER, sigmoid.t_max - DELTA_DER),)
-                                     bounds=((sigmoid.t_min + 1 * DELTA_DER, (sigmoid.t_max - sigmoid.t_min) / 2),)
+                                     bounds=(
+                                         (sigmoid.t_min + 5 * DELTA_DER, (sigmoid.t_max - sigmoid.t_min) / 2),)
                                      )
     return optimize.root(equation, anneal.x, args=sigmoid)
 
 
-def main():
+def interactive_main():
     print("Inflection point calculator")
     print("============================================================================")
 
@@ -47,7 +48,7 @@ def main():
         print("!!!!!!!!!! There was a problem during the optimization. Be careful with the results!")
 
     # plotting functions, probably should be in their own function ...
-    t = np.linspace(s.t_min + DELTA_DER, s.t_max - DELTA_DER, 1000)
+    t = np.linspace(s.t_min + 3*DELTA_DER, s.t_max - 3*DELTA_DER, 1000)
     second_der = equation(t, s)
     sigmoid_data = s(t)
     (fig, (ax1, ax2)) = plt.subplots(1, 2)
@@ -61,6 +62,24 @@ def main():
     ax2.plot(solution.x, solution.fun, "ro")
     plt.show()
 
+def map_func(d, g):
+    s = get_sigmoid(d, g)
+    solution = find_inflection(s)
+    return solution.x
+
+def stats_main():
+    dims = np.arange(1.5, 3.3, 0.05)
+    exponents = np.arange(1, 5, 0.2)
+    print(f'g\td\tinflection point')
+    for g in exponents:
+        for d in dims:
+            print(f"{g}\t{d}\t{map_func(d,g)[0]}")
+
 
 if __name__ == "__main__":
-    main()
+    import os
+    state = os.environ.get("INFLMODE")
+    if state is None:
+        interactive_main()
+    else:
+        stats_main()
