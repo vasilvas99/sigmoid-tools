@@ -24,7 +24,7 @@ def read_data_csv(path: pathlib.Path):
     return filter_data(np.array(data))
 
 
-def calculate_error(trial_sol, data):
+def calculate_resd_vector(trial_sol, data):
     t_vals = data[:, 0]
     s_vals = data[:, 1]
 
@@ -36,7 +36,7 @@ def calculate_error(trial_sol, data):
 def lsq_cost(x, data):
     d, g = x
     s = get_sigmoid(d, g)
-    return calculate_error(s, data)
+    return calculate_resd_vector(s, data)
 
 
 def plot(d, g, data):
