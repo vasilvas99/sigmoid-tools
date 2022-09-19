@@ -9,7 +9,7 @@ DELTA_DER = 1e-2
 
 def equation(t, sigmoid):
     dt = DELTA_DER
-    return np.squeeze((-sigmoid(t+2*dt)+16*sigmoid(t+dt)-30*sigmoid(t)+16*sigmoid(t-dt)-sigmoid(t-2*dt))/(12*(dt**3)))
+    return np.squeeze((-sigmoid(t+2*dt)+16*sigmoid(t+dt)-30*sigmoid(t)+16*sigmoid(t-dt)-sigmoid(t-2*dt))/(12*(dt**2)))
     # return ((sigmoid(t + dt) - 2 * sigmoid(t) + sigmoid(t - dt)) / (dt ** 2))[0]
 
 def find_inflection(sigmoid):
