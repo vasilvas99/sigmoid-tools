@@ -9,8 +9,8 @@ def rhs(t, y, d, g, tau_sm):
         2
         * d
         * tau_sm
-        * np.power((1 - tau_sm * y), g)
-        * np.power(tau_sm * y, (1 - (1 / d)))
+        * np.power((1 - y), g)
+        * np.power(y, (1 - (1 / d)))
     )
     # return 2 * d * ((1 - y) ** g) * (y ** (1 - (1 / d)))
 

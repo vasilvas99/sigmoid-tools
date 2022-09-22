@@ -6,10 +6,10 @@
   "param_finder_props": {
     "d_min": 0,
     "g_min": 0,
-    "tau_sm_min": 0.1,
+    "tau_sm_min": 0.0,
 
-    "d_max": 3,
-    "g_max": 2,
+    "d_max": 6,
+    "g_max": 3,
     "tau_sm_max": 2,
 
     "g_ini": 1,
