@@ -39,16 +39,16 @@ def calculate_resd_vector(trial_sol, data):
 
 
 def lsq_cost(x, data):
-    d, g, tau_sm = x
-    s = get_sigmoid(d, g, tau_sm)
+    d, g, mu = x
+    s = get_sigmoid(d, g, mu)
     return calculate_resd_vector(s, data)
 
 
-def plot(d, g, tau_sm, data):
+def plot(d, g, mu, data):
     t_d = data[:, 0]
     y_d = data[:, 1]
 
-    s = get_sigmoid(d, g, tau_sm)
+    s = get_sigmoid(d, g, mu)
     t_calc = np.linspace(SIGMOID_CONFIG["t0"], SIGMOID_CONFIG["t_final"], 1000)
     y_calc = np.squeeze(s(t_calc))
 
@@ -57,12 +57,12 @@ def plot(d, g, tau_sm, data):
     plt.show()
 
 
-def r2_calc(d, g, tau_sm, data):
+def r2_calc(d, g, mu, data):
     t_d = data[:, 0]
     y_d = data[:, 1]
     y_davg = np.average(y_d)
 
-    s = get_sigmoid(d, g, tau_sm)
+    s = get_sigmoid(d, g, mu)
     y_calc = np.squeeze(s(t_d))
 
     ss_tot = np.sum((y_d-y_davg)**2)
@@ -89,7 +89,7 @@ def main():
         x0=[
             FINDER_CONFIG["d_ini"],
             FINDER_CONFIG["g_ini"],
-            FINDER_CONFIG["tau_sm_ini"],
+            FINDER_CONFIG["mu_ini"],
         ],
         args=(dat,),
         verbose=2,
@@ -97,18 +97,18 @@ def main():
             (
                 FINDER_CONFIG["d_min"],
                 FINDER_CONFIG["g_min"],
-                FINDER_CONFIG["tau_sm_min"],
+                FINDER_CONFIG["mu_min"],
             ),
             (
                 FINDER_CONFIG["d_max"],
                 FINDER_CONFIG["g_max"],
-                FINDER_CONFIG["tau_sm_max"],
+                FINDER_CONFIG["mu_max"],
             ),
         ),
     )
     d = fit.x[0]
     g = fit.x[1]
-    tau_sm = fit.x[2]
+    mu = fit.x[2]
     print(
         "\n\n============================================================================"
     )
@@ -119,7 +119,7 @@ def main():
     if fit.success:
         print(
             f"Least Squares Fit successfully completed. "
-            f"Obtained d = {d}, g = {g}, tau_sm = {tau_sm}"
+            f"Obtained d = {d}, g = {g}, mu = {mu}"
         )
     else:
         print("!!!!!!!\nFit failed. Check the algorithm output above\n!!!!!!")
@@ -127,8 +127,8 @@ def main():
         "============================================================================"
     )
 
-    print(f"R^2: {r2_calc(d, g, tau_sm, dat)*100}%")
-    plot(d, g, tau_sm, dat)
+    print(f"R^2: {r2_calc(d, g, mu, dat)*100}%")
+    plot(d, g, mu, dat)
 
 
 if __name__ == "__main__":

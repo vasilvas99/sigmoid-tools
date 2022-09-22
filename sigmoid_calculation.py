@@ -4,23 +4,23 @@ import scipy.integrate as integrate
 from script_configurator import SIGMOID_CONFIG
 
 
-def rhs(t, y, d, g, tau_sm):
+def rhs(t, y, d, g, mu):
     return (
         2
         * d
-        * tau_sm
+        * mu
         * np.power((1 - y), g)
         * np.power(y, (1 - (1 / d)))
     )
     # return 2 * d * ((1 - y) ** g) * (y ** (1 - (1 / d)))
 
 
-def get_sigmoid(d, g, tau_sm=1):
+def get_sigmoid(d, g, mu=1):
     sol = integrate.solve_ivp(
         rhs,
         [SIGMOID_CONFIG["t0"], SIGMOID_CONFIG["t_final"]],
         [SIGMOID_CONFIG["initial_alpha"]],
-        args=(d, g, tau_sm),
+        args=(d, g, mu),
         dense_output=True,
         method="DOP853",
         atol=1e-15,
