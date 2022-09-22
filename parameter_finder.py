@@ -19,7 +19,9 @@ def filter_data(data):
 
 def read_data_csv(path: pathlib.Path):
     with open(path) as f:
-        reader = csv.reader(f, delimiter=SIGMOID_CONFIG["csv_delimiter"], quoting=csv.QUOTE_NONNUMERIC)
+        reader = csv.reader(
+            f, delimiter=SIGMOID_CONFIG["csv_delimiter"], quoting=csv.QUOTE_NONNUMERIC
+        )
         data = [row for row in reader]
     return filter_data(np.array(data))
 
@@ -34,16 +36,16 @@ def calculate_resd_vector(trial_sol, data):
 
 
 def lsq_cost(x, data):
-    d, g = x
-    s = get_sigmoid(d, g)
+    d, g, tau_sm = x
+    s = get_sigmoid(d, g, tau_sm)
     return calculate_resd_vector(s, data)
 
 
-def plot(d, g, data):
+def plot(d, g, tau_sm, data):
     t_d = data[:, 0]
     y_d = data[:, 1]
 
-    s = get_sigmoid(d, g)
+    s = get_sigmoid(d, g, tau_sm)
     t_calc = np.linspace(SIGMOID_CONFIG["t0"], SIGMOID_CONFIG["t_final"], 1000)
     y_calc = np.squeeze(s(t_calc))
 
@@ -63,21 +65,34 @@ def main():
     dat = read_data_csv(p.file_path)
 
     print("Data read successfully. Starting optimization.")
-    print("============================================================================")
-    fit = optimize.least_squares(lsq_cost, x0=[1, 1], args=(dat,), verbose=2, bounds=(1e-10, np.inf))
+    print(
+        "============================================================================"
+    )
+    fit = optimize.least_squares(
+        lsq_cost, x0=[1, 1, 1], args=(dat,), verbose=2, bounds=(1e-10, np.inf)
+    )
     d = fit.x[0]
     g = fit.x[1]
-    print("\n\n============================================================================")
+    tau_sm = fit.x[2]
+    print(
+        "\n\n============================================================================"
+    )
     print(fit)
-    print("============================================================================")
+    print(
+        "============================================================================"
+    )
     if fit.success:
-        print(f"Least Squares Fit successfully completed. "
-              f"Obtained d = {d}, g = {g}")
+        print(
+            f"Least Squares Fit successfully completed. "
+            f"Obtained d = {d}, g = {g}, tau_sm = {tau_sm}"
+        )
     else:
         print("!!!!!!!\nFit failed. Check the algorithm output above\n!!!!!!")
-    print("============================================================================")
+    print(
+        "============================================================================"
+    )
 
-    plot(d, g, dat)
+    plot(d, g, tau_sm, dat)
 
 
 if __name__ == "__main__":
