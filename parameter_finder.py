@@ -1,6 +1,7 @@
 import argparse
 import csv
 import pathlib
+from tarfile import TarInfo
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -56,6 +57,19 @@ def plot(d, g, tau_sm, data):
     plt.show()
 
 
+def r2_calc(d, g, tau_sm, data):
+    t_d = data[:, 0]
+    y_d = data[:, 1]
+    y_davg = np.average(y_d)
+
+    s = get_sigmoid(d, g, tau_sm)
+    y_calc = np.squeeze(s(t_d))
+
+    ss_tot = np.sum((y_d-y_davg)**2)
+    ss_res = np.sum((y_d-y_calc)**2)
+    return 1 - (ss_res/ss_tot)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("file_path", type=pathlib.Path)
@@ -63,7 +77,7 @@ def main():
 
     if not p.file_path.exists():
         raise FileNotFoundError("Input File not found!")
-
+    print(f"Running optimization with config: \n{FINDER_CONFIG}")
     dat = read_data_csv(p.file_path)
 
     print("Data read successfully. Starting optimization.")
@@ -79,7 +93,18 @@ def main():
         ],
         args=(dat,),
         verbose=2,
-        bounds=(-np.inf, np.inf),
+        bounds=(
+            (
+                FINDER_CONFIG["d_min"],
+                FINDER_CONFIG["g_min"],
+                FINDER_CONFIG["tau_sm_min"],
+            ),
+            (
+                FINDER_CONFIG["d_max"],
+                FINDER_CONFIG["g_max"],
+                FINDER_CONFIG["tau_sm_max"],
+            ),
+        ),
     )
     d = fit.x[0]
     g = fit.x[1]
@@ -102,6 +127,7 @@ def main():
         "============================================================================"
     )
 
+    print(f"R^2: {r2_calc(d, g, tau_sm, dat)*100}%")
     plot(d, g, tau_sm, dat)
 
 
