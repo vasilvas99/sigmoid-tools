@@ -9,6 +9,8 @@ import scipy.optimize as optimize
 from script_configurator import SIGMOID_CONFIG
 from sigmoid_calculation import get_sigmoid
 
+FINDER_CONFIG = SIGMOID_CONFIG["param_finder_props"]
+
 
 def filter_data(data):
     # filter data to stay within interpolation bounds
@@ -69,7 +71,15 @@ def main():
         "============================================================================"
     )
     fit = optimize.least_squares(
-        lsq_cost, x0=[1, 1, 1], args=(dat,), verbose=2, bounds=(1e-10, np.inf)
+        lsq_cost,
+        x0=[
+            FINDER_CONFIG["d_ini"],
+            FINDER_CONFIG["g_ini"],
+            FINDER_CONFIG["tau_sm_ini"],
+        ],
+        args=(dat,),
+        verbose=2,
+        bounds=(-np.inf, np.inf),
     )
     d = fit.x[0]
     g = fit.x[1]

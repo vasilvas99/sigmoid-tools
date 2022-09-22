@@ -1,9 +1,7 @@
-import json
-
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.integrate as integrate
-from script_configurator import *
+from script_configurator import SIGMOID_CONFIG
 
 
 def rhs(t, y, d, g, tau_sm):

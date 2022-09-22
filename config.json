@@ -2,5 +2,11 @@
   "t0": 0.0,
   "t_final": 5,
   "initial_alpha": 1e-14,
-  "csv_delimiter": "\t"
+  "csv_delimiter": "\t",
+  "param_finder_props": {
+    "g_ini": 1,
+    "d_ini": 1,
+    "tau_sm_ini": 1
+  }
 }
+ 
