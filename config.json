@@ -2,5 +2,19 @@
   "t0": 0.0,
   "t_final": 2,
   "initial_alpha": 1e-14,
-  "csv_delimiter": "\t"
+  "csv_delimiter": "\t",
+  "param_finder_props": {
+    "d_min": 0,
+    "g_min": 1,
+    "mu_min": 0.0,
+
+    "d_max": 3,
+    "g_max": 2,
+    "mu_max": 2,
+
+    "g_ini": 1,
+    "d_ini": 2,
+    "mu_ini": 0.5
+  }
 }
+ 
