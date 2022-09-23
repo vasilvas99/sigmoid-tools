@@ -14,7 +14,10 @@
 
     "g_ini": 1,
     "d_ini": 2,
-    "mu_ini": 0.5
+    "mu_ini": 0.5,
+
+    "shift_time": 0
+
   }
 }
  

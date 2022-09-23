@@ -15,6 +15,8 @@ FINDER_CONFIG = SIGMOID_CONFIG["param_finder_props"]
 
 def filter_data(data):
     # filter data to stay within interpolation bounds
+    if FINDER_CONFIG["shift_time"] != 0:
+        data[:,0] = data[:,0] - np.min(data[:,0])
     data = data[data[:, 0] > SIGMOID_CONFIG["t0"]]
     data = data[data[:, 0] < SIGMOID_CONFIG["t_final"]]
     return data
