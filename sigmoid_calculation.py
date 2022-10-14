@@ -3,14 +3,19 @@ import numpy as np
 import scipy.integrate as integrate
 from script_configurator import SIGMOID_CONFIG
 
+NTAYLOR = SIGMOID_CONFIG["n_terms_taylor"]
 
 def rhs(t, y, d, g, mu):
+    taylor_sum = 0
+    for n in range(1, NTAYLOR+1, 1):
+        taylor_sum += np.power(y,n)/n
+
     return (
         2
         * d
         * mu
         * np.power((1 - y), g)
-        * np.power(y, (1 - (1 / d)))
+        * np.power(taylor_sum, (1 - (1 / d)))
     )
     # return 2 * d * ((1 - y) ** g) * (y ** (1 - (1 / d)))
 
