@@ -7,13 +7,16 @@
   "param_finder_props": {
     "d_min": 0.1,
     "g_min": 0.5,
-    "mu_min": 0.1,
+    "mu_min": 0,
+    
     "d_max": 3,
     "g_max": 2.5,
     "mu_max": 2,
-    "g_ini": 1,
-    "d_ini": 2,
-    "mu_ini": 0.5,
+    
+    "g_ini": 2,
+    "d_ini": 1,
+    "mu_ini": 0.005,
+    
     "shift_time": 0
   }
 }
