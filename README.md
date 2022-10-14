@@ -35,9 +35,26 @@ pip3 install -r ./requirements.txt
 ```json
 {
   "t0": 0.0,
-  "t_final": 2,
+  "t_final": 1.2,
   "initial_alpha": 1e-14,
-  "csv_delimiter": "\t"
+  "n_terms_taylor": 1,
+  "csv_delimiter": "\t",
+  "param_finder_props": {
+    "d_min": 0,
+    "g_min": 0.5,
+    "mu_min": 0.0,
+
+    "d_max": 3,
+    "g_max": 2.5,
+    "mu_max": 2,
+
+    "g_ini": 1,
+    "d_ini": 2,
+    "mu_ini": 0.5,
+
+    "shift_time": 0
+
+  }
 }
 ```
 
@@ -60,7 +77,7 @@ pip3 install -r ./requirements.txt
 python parameter_finder <path_to_input_file.csv>
 ```
 
-Където `parameter_finder` пътя до файла с входните данни. Примерен такъв e ./misc/test_input.txt. Съдържанието на подобен файл трябва да е като следното:
+Където `parameter_finder` пътя до файла с входните данни. Примерен такъв e ./misc/test_input_D2g1.txt. Съдържанието на подобен файл трябва да е като следното:
 
 ```
 0	0
@@ -94,23 +111,6 @@ python parameter_finder <path_to_input_file.csv>
 
 Т.е. скрипта ще изпише в конзолата стойностите за d, g > 0 и ще изрисува графиката на съответстваща на тези стойности сигмоида и входните данни (червени точки).
 
-### Inflection point
-
-Скриптът `inflection_point.py` е по-интерактивен и се опитва чрез числени методи да апроксимира инфлексната точка на сигмоидата съответстваща на зададени от потребителя стойности за d, g.
-
-За да го използвате:
-
-```
-python inflection_point.py
-```
-
-Скриптът ще ви попита за стойностите на d, g и след това ще изпише съответните резултати на конзолата:
-
-![Inflection_CLI](./misc/inflection_point_workflow.png)
-
-Последният ред ще ви даде конкретните стойности от изчисленията. Освен това ще изчертае и следните две графики - на сигмоидата и на втората ѝ производна с отбелязано местоположението на съответно инфлексната точка и нулата върху тях. 
-
-![Inflection_plot](./misc/inflection_point_plot.png)
 
 #### Внимание !!!
 
