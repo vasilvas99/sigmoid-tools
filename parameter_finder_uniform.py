@@ -43,7 +43,7 @@ def calculate_resd_vector(trial_sol, data):
 def uniform_cost(x, data):
     d, g, mu = x
     s = get_sigmoid(d, g, mu)
-    return np.sum(np.abs(calculate_resd_vector(s, data)))
+    return np.max(np.abs(calculate_resd_vector(s, data)))
 
 
 def plot(d, g, mu, data):
