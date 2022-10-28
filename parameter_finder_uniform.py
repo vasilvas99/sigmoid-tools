@@ -119,7 +119,7 @@ def main():
     )
 
     print(f"R^2 = {r2_calc(d, g, mu, dat)*100}%")
-    plot(d, g, mu, dat)
+    # plot(d, g, mu, dat)
 
 
 if __name__ == "__main__":
