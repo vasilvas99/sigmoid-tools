@@ -70,13 +70,13 @@ def main():
         exit(-1)
     jmak_files = get_jmak_file_paths(pathlib.Path("/home/vasko/Documents/sigmoid-tools/jmak_data"))
 
-    csv_rows = [["jmak-n", "d", "g", "c.f. SM->JMAK", "R^2", "procedure"]]
+    csv_rows = [["jmak-n", "d", "g", "c.f. SM->JMAK", "R^2%", "procedure"]]
     for file in jmak_files:
         res = process_file(run_nlsq, file)
         res.append("NLSQ")
         csv_rows.append(res)
         
-    csv_rows.append(["jmak-n", "d", "g", "c.f. SM->JMAK", "R^2", "procedure"])
+    csv_rows.append(["jmak-n", "d", "g", "c.f. SM->JMAK", "R^2%", "procedure"])
     for file in jmak_files:
         res = process_file(run_uniform, file)
         res.append("UNIFORM")
