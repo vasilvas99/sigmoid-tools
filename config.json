@@ -1,21 +1,21 @@
 {
   "t0": 0.0,
-  "t_final": 5,
+  "t_final": 1.5,
   "initial_alpha": 1e-14,
   "n_terms_taylor": 1,
   "csv_delimiter": "\t",
   "param_finder_props": {
-    "d_min": 0.1,
-    "g_min": 0.1,
+    "d_min": 3,
+    "g_min": 1,
     "mu_min": 0,
     
-    "d_max": 4.5,
-    "g_max": 2.1,
-    "mu_max": 1,
+    "d_max": 3.0000000002,
+    "g_max": 1.00000002,
+    "mu_max": 2,
     
-    "g_ini": 0.5,
-    "d_ini": 2,
-    "mu_ini": 1,
+    "g_ini": 1.000000001,
+    "d_ini": 3.0000000001,
+    "mu_ini": 1.5,
     
     "shift_time": 0
   }

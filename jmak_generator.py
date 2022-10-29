@@ -30,6 +30,7 @@ def cli():
         "tmin", type=float, help="The starting time value for calculation"
     )
     parser.add_argument("tmax", type=float, help="The final time value for calculation")
+    parser.add_argument("outputdir", type=pathlib.Path, help ="Output file location")
     parser.add_argument(
         "tstep",
         nargs="?",
@@ -37,7 +38,13 @@ def cli():
         default=0.01,
         help="The timestep for data generation. Default = 0.01",
     )
-    parser.add_argument("outputdir", type=pathlib.Path, help ="Output file location")
+    parser.add_argument(
+        "alphaclip",
+        nargs="?",
+        type=float,
+        default=0.999,
+        help="The maximum value for alpha in the datasets. Default = 0.999",
+    )
     return parser.parse_args()
 
 def main():
@@ -47,10 +54,13 @@ def main():
         eprint("outputdir is not a valid directory!")
         exit(-1)
     
-    # generate data
+    # generate dataalphaclip
     t = np.arange(args.tmin, args.tmax, args.tstep)
     alpha = jmak_n_tau(t, args.n, args.tau)
     
+    mask = alpha <= args.alphaclip
+    t = t[mask]
+    alpha = alpha[mask]
     # save to csv
     with open(args.outputdir/f"jmak-n{args.n}-tau{args.tau}-tmin{args.tmin}-tmax{args.tmax}.tsv", "w") as f:
         writer = csv.writer(f, delimiter="\t")
