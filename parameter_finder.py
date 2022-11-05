@@ -71,21 +71,7 @@ def r2_calc(d, g, mu, data):
     ss_res = np.sum((y_d-y_calc)**2)
     return 1 - (ss_res/ss_tot)
 
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("file_path", type=pathlib.Path)
-    p = parser.parse_args()
-
-    if not p.file_path.exists():
-        raise FileNotFoundError("Input File not found!")
-    print(f"Running optimization with config: \n{FINDER_CONFIG}")
-    dat = read_data_csv(p.file_path)
-
-    print("Data read successfully. Starting optimization.")
-    print(
-        "============================================================================"
-    )
+def fit_data(dat):
     fit = optimize.least_squares(
         lsq_cost,
         x0=[
@@ -111,6 +97,28 @@ def main():
     d = fit.x[0]
     g = fit.x[1]
     mu = fit.x[2]
+    return fit,d,g,mu
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file_path", type=pathlib.Path)
+    p = parser.parse_args()
+
+    if not p.file_path.exists():
+        raise FileNotFoundError("Input File not found!")
+    print(f"Running optimization with config: \n{FINDER_CONFIG}")
+    dat = read_data_csv(p.file_path)
+
+    print("Data read successfully. Starting optimization.")
+    print(
+        "============================================================================"
+    )
+
+    fit, d, g, mu = fit_data(dat)
+    
+    if FINDER_CONFIG["plot_graphs_matplotlib"] != 0 :   
+        plot(d, g, mu, dat)
+    
     print(
         "\n\n============================================================================"
     )
@@ -130,7 +138,8 @@ def main():
     )
 
     print(f"R^2 = {r2_calc(d, g, mu, dat)*100}%")
-    # plot(d, g, mu, dat)
+
+
 
 
 if __name__ == "__main__":

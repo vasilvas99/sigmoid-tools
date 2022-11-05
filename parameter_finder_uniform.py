@@ -71,6 +71,20 @@ def r2_calc(d, g, mu, data):
     ss_res = np.sum((y_d-y_calc)**2)
     return 1 - (ss_res/ss_tot)
 
+def fit_data(dat):
+    fit = optimize.minimize(uniform_cost,
+                        x0 = (FINDER_CONFIG["d_ini"], FINDER_CONFIG["g_ini"], FINDER_CONFIG["mu_ini"]), 
+                        bounds=((FINDER_CONFIG["d_min"], FINDER_CONFIG["d_max"]), 
+                                (FINDER_CONFIG["g_min"], FINDER_CONFIG["g_max"]),
+                                (FINDER_CONFIG["mu_min"], FINDER_CONFIG["mu_max"])),
+                        args=(dat,),
+                        method="Nelder-Mead"
+                        )
+
+    d = fit.x[0]
+    g = fit.x[1]
+    mu = fit.x[2]
+    return fit,d,g,mu
 
 def main():
     parser = argparse.ArgumentParser()
@@ -87,23 +101,17 @@ def main():
         "============================================================================"
     )
 
-    fit = optimize.minimize(uniform_cost,
-                        x0 = (FINDER_CONFIG["d_ini"], FINDER_CONFIG["g_ini"], FINDER_CONFIG["mu_ini"]), 
-                        bounds=((FINDER_CONFIG["d_min"], FINDER_CONFIG["d_max"]), 
-                                (FINDER_CONFIG["g_min"], FINDER_CONFIG["g_max"]),
-                                (FINDER_CONFIG["mu_min"], FINDER_CONFIG["mu_max"])),
-                        args=(dat,),
-                        method="Nelder-Mead"
-                        )
+    fit, d, g, mu = fit_data(dat)
 
-    d = fit.x[0]
-    g = fit.x[1]
-    mu = fit.x[2]
     print(f"Uniform error {fit.fun}")
     print(
         "\n\n============================================================================"
     )
     print(fit)
+    
+    if FINDER_CONFIG["plot_graphs_matplotlib"] != 0 :   
+        plot(d, g, mu, dat)
+
     print(
         "============================================================================"
     )
@@ -119,7 +127,7 @@ def main():
     )
 
     print(f"R^2 = {r2_calc(d, g, mu, dat)*100}%")
-    # plot(d, g, mu, dat)
+
 
 
 if __name__ == "__main__":
