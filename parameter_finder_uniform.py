@@ -109,8 +109,6 @@ def main():
     )
     print(fit)
     
-    if FINDER_CONFIG["plot_graphs_matplotlib"] != 0 :   
-        plot(d, g, mu, dat)
 
     print(
         "============================================================================"
@@ -128,6 +126,8 @@ def main():
 
     print(f"R^2 = {r2_calc(d, g, mu, dat)*100}%")
 
+    if FINDER_CONFIG["plot_graphs_matplotlib"] != 0 :   
+        plot(d, g, mu, dat)
 
 
 if __name__ == "__main__":
