@@ -1,6 +1,6 @@
 {
   "t0": 0.0,
-  "t_final": 1.5,
+  "t_final": 15,
   "initial_alpha": 1e-14,
   "n_terms_taylor": 1,
   "csv_delimiter": "\t",
@@ -11,12 +11,17 @@
     
     "d_max": 3.0000000002,
     "g_max": 1.00000002,
-    "mu_max": 2,
+    "mu_max": 5,
     
     "g_ini": 1.000000001,
     "d_ini": 3.0000000001,
-    "mu_ini": 1.5,
+    "mu_ini": 0.0808439528914435,
     
-    "shift_time": 0
+    "shift_time": 0,
+    "plot_graphs_matplotlib": 1
+  },
+
+  "time_offset_finder_proprs": {
+    "fit_procedure": "nlsq"
   }
 }
