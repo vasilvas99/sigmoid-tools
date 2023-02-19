@@ -28,7 +28,7 @@ def get_sigmoid(d, g, mu=1):
         args=(d, g, mu),
         dense_output=True,
         method="DOP853",
-        atol=1e-15,
+        atol=1e-7,
     )
     if sol.status != 0:
         raise RuntimeError("Sigmoid integration failed!")
