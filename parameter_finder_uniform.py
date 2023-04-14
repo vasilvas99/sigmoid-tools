@@ -72,13 +72,12 @@ def r2_calc(d, g, mu, data):
     return 1 - (ss_res/ss_tot)
 
 def fit_data(dat):
-    fit = optimize.minimize(uniform_cost,
+    fit = optimize.dual_annealing(uniform_cost,
                         x0 = (FINDER_CONFIG["d_ini"], FINDER_CONFIG["g_ini"], FINDER_CONFIG["mu_ini"]), 
                         bounds=((FINDER_CONFIG["d_min"], FINDER_CONFIG["d_max"]), 
                                 (FINDER_CONFIG["g_min"], FINDER_CONFIG["g_max"]),
                                 (FINDER_CONFIG["mu_min"], FINDER_CONFIG["mu_max"])),
                         args=(dat,),
-                        method="Nelder-Mead"
                         )
 
     d = fit.x[0]
