@@ -13,7 +13,7 @@ def help():
 if len(sys.argv) < 2:
     help()
     exit(1)
-if sys.argv[0] == "-h" or sys.argv[0] == "--help":
+if sys.argv[1] == "-h" or sys.argv[1] == "--help":
     help()
     exit(0)
 
