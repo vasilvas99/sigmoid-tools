@@ -41,16 +41,16 @@ def calculate_resd_vector(trial_sol, data):
 
 
 def uniform_cost(x, data):
-    d, g, mu = x
-    s = get_sigmoid(d, g, mu)
+    d, g, mu, Nmax = x
+    s = get_sigmoid(d, g, mu, Nmax)
     return np.max(np.abs(calculate_resd_vector(s, data)))
 
 
-def plot(d, g, mu, data):
+def plot(d, g, mu, Nmax, data):
     t_d = data[:, 0]
     y_d = data[:, 1]
 
-    s = get_sigmoid(d, g, mu)
+    s = get_sigmoid(d, g, mu, Nmax)
     t_calc = np.linspace(SIGMOID_CONFIG["t0"], SIGMOID_CONFIG["t_final"], 1000)
     y_calc = np.squeeze(s(t_calc))
 
@@ -59,12 +59,12 @@ def plot(d, g, mu, data):
     plt.show()
 
 
-def r2_calc(d, g, mu, data):
+def r2_calc(d, g, mu, Nmax, data):
     t_d = data[:, 0]
     y_d = data[:, 1]
     y_davg = np.average(y_d)
 
-    s = get_sigmoid(d, g, mu)
+    s = get_sigmoid(d, g, mu, Nmax)
     y_calc = np.squeeze(s(t_d))
 
     ss_tot = np.sum((y_d-y_davg)**2)
@@ -73,17 +73,19 @@ def r2_calc(d, g, mu, data):
 
 def fit_data(dat):
     fit = optimize.dual_annealing(uniform_cost,
-                        x0 = (FINDER_CONFIG["d_ini"], FINDER_CONFIG["g_ini"], FINDER_CONFIG["mu_ini"]), 
+                        x0 = (FINDER_CONFIG["d_ini"], FINDER_CONFIG["g_ini"], FINDER_CONFIG["mu_ini"], FINDER_CONFIG["Nmax_ini"]), 
                         bounds=((FINDER_CONFIG["d_min"], FINDER_CONFIG["d_max"]), 
                                 (FINDER_CONFIG["g_min"], FINDER_CONFIG["g_max"]),
-                                (FINDER_CONFIG["mu_min"], FINDER_CONFIG["mu_max"])),
+                                (FINDER_CONFIG["mu_min"], FINDER_CONFIG["mu_max"]),
+                                (FINDER_CONFIG["Nmax_min"], FINDER_CONFIG["Nmax_max"])),
                         args=(dat,),
                         )
 
     d = fit.x[0]
     g = fit.x[1]
     mu = fit.x[2]
-    return fit,d,g,mu
+    Nmax = fit.x[3]
+    return fit,d,g,mu,Nmax
 
 def main():
     parser = argparse.ArgumentParser()
@@ -100,7 +102,7 @@ def main():
         "============================================================================"
     )
 
-    fit, d, g, mu = fit_data(dat)
+    fit, d, g, mu, Nmax = fit_data(dat)
 
     print(f"Uniform error {fit.fun}")
     print(
@@ -115,7 +117,7 @@ def main():
     if fit.success:
         print(
             f"Uniform fit completed. "
-            f"Obtained d = {d}, g = {g}, mu = {mu}"
+            f"Obtained d = {d}, g = {g}, mu = {mu}, Nmax = {Nmax}"
         )
     else:
         print("!!!!!!!\nFit failed. Check the algorithm output above\n!!!!!!")
@@ -123,10 +125,10 @@ def main():
         "============================================================================"
     )
 
-    print(f"R^2 = {r2_calc(d, g, mu, dat)*100}%")
+    print(f"R^2 = {r2_calc(d, g, mu, Nmax, dat)*100}%")
 
     if FINDER_CONFIG["plot_graphs_matplotlib"] != 0 :   
-        plot(d, g, mu, dat)
+        plot(d, g, mu, Nmax, dat)
 
 
 if __name__ == "__main__":

@@ -5,27 +5,26 @@ from script_configurator import SIGMOID_CONFIG
 
 NTAYLOR = SIGMOID_CONFIG["n_terms_taylor"]
 
-def rhs(t, y, d, g, mu):
+def rhs(t, y, d, g, mu, Ymax):
     taylor_sum = 0
     for n in range(1, NTAYLOR+1, 1):
-        taylor_sum += np.power(y,n)/n
-
+        taylor_sum += np.power(y/Ymax,n)/n
     return (
         2
         * d
         * mu
-        * np.power((1 - y), g)
+        * np.power((1 - y/Ymax), g)
         * np.power(taylor_sum, (1 - (1 / d)))
     )
     # return 2 * d * ((1 - y) ** g) * (y ** (1 - (1 / d)))
 
 
-def get_sigmoid(d, g, mu=1):
+def get_sigmoid(d, g, mu=1, Nmax=1):
     sol = integrate.solve_ivp(
         rhs,
         [SIGMOID_CONFIG["t0"], SIGMOID_CONFIG["t_final"]],
         [SIGMOID_CONFIG["initial_alpha"]],
-        args=(d, g, mu),
+        args=(d, g, mu, Nmax),
         dense_output=True,
         method="DOP853",
         atol=1e-7,
