@@ -10,7 +10,7 @@ def rhs(t, y, d, g, mu, Ymax):
     for n in range(1, NTAYLOR+1, 1):
         taylor_sum += np.power(y/Ymax,n)/n
     return (
-        2
+        2*Ymax
         * d
         * mu
         * np.power((1 - y/Ymax), g)
@@ -36,7 +36,7 @@ def get_sigmoid(d, g, mu=1, Nmax=1):
 
 def main():
     t = np.linspace(SIGMOID_CONFIG["t0"], SIGMOID_CONFIG["t_final"], 1000)
-    sigmoid = get_sigmoid(2, 1, 0.2)
+    sigmoid = get_sigmoid(2, 1, 1, Nmax=92)
     y = sigmoid(t)
     plt.plot(t, y.T)
     plt.show()
