@@ -2,8 +2,8 @@ import json
 import toml
 import os
 from pathlib import Path
+from typing import Tuple
 from warnings import warn
-
 basepath = Path(os.path.dirname(__file__))
 
 JSON_T = "json"
@@ -13,12 +13,12 @@ config_json = basepath / Path("config.json")
 config_toml = basepath / Path("config.toml")
 
 
-def find_config() -> Path:
+def find_config() -> Tuple[Path, str]:
     """Tries to find the config file and returns the path to either the TOML or JSON config.
     JSON will always take precedence if both config files exist.
 
     Returns:
-        Path: Path to the found config file
+        Tuple[Path, str]: Path to the found config file and the type of the found file.
     """
     if config_toml.exists() and config_json.exists():
         warn(
