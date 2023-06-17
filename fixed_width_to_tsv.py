@@ -6,12 +6,14 @@ and thus easier to parse tab-separated values (TSV) format.
 Provides an ArgParse Cli.
 """
 
+import csv
 from typing import List
 from pathlib import Path
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
 
-import numpy as np
+
+# import numpy as np
 
 
 parser = ArgumentParser(
@@ -60,5 +62,6 @@ with open(input_path, encoding="utf-8") as f:
     with ThreadPoolExecutor() as executor:
         parsed_list = list(executor.map(parse_line, f))
 
-parsed_arr = np.array(parsed_list)
-np.savetxt(output_path, parsed_arr, delimiter="\t")
+with open(output_path, mode="w", encoding="utf-8", newline="") as f:
+    writer = csv.writer(f, delimiter="\t")
+    writer.writerows(parsed_list)
