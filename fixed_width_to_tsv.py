@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
-import numpy as np
 
-import os
-import sys
+"""
+An executable script that converts fixed-width (Fortran) format files to the more predictable
+and thus easier to parse tab-separated values (TSV) format.
+Provides an ArgParse Cli.
+"""
 
 from typing import List
 from pathlib import Path
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
+
+import numpy as np
+
 
 parser = ArgumentParser(
     description="Converts fixed-width (Fortran) format files to tab-separated (TSV) format."
