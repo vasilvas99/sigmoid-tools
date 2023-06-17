@@ -1,38 +1,59 @@
 #!/usr/bin/env python3
+import numpy as np
+
 import os
 import sys
-import pandas as pd
+
+from typing import List
 from pathlib import Path
+from argparse import ArgumentParser
+from concurrent.futures import ThreadPoolExecutor
 
-def help():
-    print("Converts a file in fixed-width-format (.dat) to tab-separated values (.tsv)\n")
-    print(f"Usage: {sys.argv[0]} [INPUT_FILE] [OUTPUT_DIRECTORY_PATH]\n\n"
-          f"If [OUTPUT_DIRECTORY_PATH] is not specified the parent of [INPUT_PATH] is used.\n")
-    print(f"{sys.argv[0]} -h or {sys.argv[0]} --help to show this help message")
+parser = ArgumentParser(
+    description="Converts fixed-width (Fortran) format files to tab-separated (TSV) format."
+)
+parser.add_argument(
+    "input_file",
+    help="Input file in fixed-width format",
+    metavar="INPUT_PATH",
+)
+parser.add_argument("-o", dest="output_path", help="Output file path.")
+parser.add_argument(
+    "-s",
+    "--skip",
+    help="Number of header lines to skip. [Default: 0]",
+    type=int,
+    default=0,
+)
+args = parser.parse_args()
 
-if len(sys.argv) < 2:
-    help()
-    exit(1)
-if sys.argv[1] == "-h" or sys.argv[1] == "--help":
-    help()
-    exit(0)
-
-p = Path(sys.argv[1])
-try:
-    o = Path(sys.argv[2]).resolve()
-    if not o.exists():
-        os.makedirs(o)
-    file_dir = o
-except IndexError:
-    file_dir = p.parent
-
-if not p.exists() or not p.is_file():
-    print(f"File {p} does not exist")
-    sys.exit(2)
+# Setup input-output paths
+input_path = Path(args.input_file).resolve(strict=True)
+if args.output_path is not None:
+    output_path = Path(args.output_path)
+else:
+    base_name = input_path.stem
+    output_path = Path(base_name).with_suffix(".tsv").resolve(strict=True)
 
 
-p  = p.resolve(strict=True)
-new_file_name = p.stem + ".tsv"
-data = pd.read_fwf(p, header=None)
+def parse_line(line: str) -> List[float]:
+    """Parse a single line of whitespace separated values to a list of float
 
-data.to_csv(file_dir/new_file_name, sep = "\t", index=False, header=False)
+    Args:
+        line (str): Line string
+
+    Returns:
+        List[float]: Output list of floats.
+    """
+    return [float(number) for number in line.strip().split()]
+
+
+with open(input_path, encoding="utf-8") as f:
+    for _ in range(args.skip):
+        # skip the first args.skip lines (header)
+        next(f)
+    with ThreadPoolExecutor() as executor:
+        parsed_list = [parsed_line for parsed_line in executor.map(parse_line, f)]
+
+parsed_arr = np.array(parsed_list)
+np.savetxt(output_path, parsed_arr, delimiter="\t")
