@@ -12,8 +12,6 @@ TOML_T = "toml"
 config_json = basepath / Path("config.json")
 config_toml = basepath / Path("config.toml")
 
-config_path = Path("")
-
 
 def find_config() -> Path:
     """Tries to find the config file and returns the path to either the TOML or JSON config.
@@ -24,7 +22,9 @@ def find_config() -> Path:
     """
     if config_toml.exists() and config_json.exists():
         warn(
-            "Both TOML and JSON configs exist. JSON will take precedence and TOML will be ignored.", category=RuntimeWarning)
+            "Both TOML and JSON configs exist. JSON will take precedence and TOML will be ignored.",
+            category=RuntimeWarning,
+        )
     if config_json.exists():
         return config_json, JSON_T
 
@@ -39,7 +39,7 @@ def find_config() -> Path:
 config_path, config_type = find_config()
 
 with open(config_path, "r", encoding="utf-8") as f:
-    if config_type ==  JSON_T:
+    if config_type == JSON_T:
         SIGMOID_CONFIG = json.load(f)
     elif config_type == TOML_T:
         SIGMOID_CONFIG = toml.load(f)
