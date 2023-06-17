@@ -5,15 +5,11 @@ An executable script that converts fixed-width (Fortran) format files to the mor
 and thus easier to parse tab-separated values (TSV) format.
 Provides an ArgParse Cli.
 """
-
 import csv
 from typing import List
 from pathlib import Path
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor
-
-
-# import numpy as np
 
 
 parser = ArgumentParser(
