@@ -33,7 +33,7 @@ if args.output_path is not None:
     output_path = Path(args.output_path)
 else:
     base_name = input_path.stem
-    output_path = Path(base_name).with_suffix(".tsv").resolve(strict=True)
+    output_path = Path(base_name).with_suffix(".tsv")
 
 
 def parse_line(line: str) -> List[float]:
@@ -53,7 +53,7 @@ with open(input_path, encoding="utf-8") as f:
         # skip the first args.skip lines (header)
         next(f)
     with ThreadPoolExecutor() as executor:
-        parsed_list = [parsed_line for parsed_line in executor.map(parse_line, f)]
+        parsed_list = list(executor.map(parse_line, f))
 
 parsed_arr = np.array(parsed_list)
 np.savetxt(output_path, parsed_arr, delimiter="\t")
