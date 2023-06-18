@@ -85,10 +85,10 @@ def fit_data(dat):
     mu = fit.x[2]
     return fit,d,g,mu
 
-def main():
+def main(cli_args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("file_path", type=pathlib.Path)
-    p = parser.parse_args()
+    p = parser.parse_args(args=cli_args)
 
     if not p.file_path.exists():
         raise FileNotFoundError("Input File not found!")
@@ -125,9 +125,9 @@ def main():
 
     print(f"R^2 = {r2_calc(d, g, mu, dat)*100}%")
 
-    if FINDER_CONFIG["plot_graphs_matplotlib"] != 0 :   
+    if FINDER_CONFIG["plot_graphs_matplotlib"] != 0:   
         plot(d, g, mu, dat)
-
+    return d, g, mu
 
 if __name__ == "__main__":
     main()
