@@ -1,5 +1,5 @@
 import json
-import toml
+import tomlkit
 import os
 from pathlib import Path
 from typing import Tuple
@@ -42,6 +42,6 @@ with open(config_path, "r", encoding="utf-8") as f:
     if config_type == JSON_T:
         SIGMOID_CONFIG = json.load(f)
     elif config_type == TOML_T:
-        SIGMOID_CONFIG = toml.load(f)
+        SIGMOID_CONFIG = tomlkit.load(f)
     else:
         raise ValueError(f"Unrecognized {config_type}. Expected {JSON_T} or {TOML_T}")
