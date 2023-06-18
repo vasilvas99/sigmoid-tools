@@ -39,16 +39,32 @@ else:
     output_path = Path(base_name).with_suffix(".tsv")
 
 
-def parse_line(line: str) -> List[float]:
-    """Parse a single line of whitespace separated values to a list of float
+def parse(val: str) -> int | float | str:
+    ret = val
+    try:
+        ret = int(val)
+        return ret
+    except ValueError as _:
+        pass
+
+    try:
+        ret = float(val)
+        return ret
+    except ValueError as _:
+        pass
+    return val
+
+
+def parse_line(line: str) -> List[int | float | str]:
+    """Parse a single line of whitespace separated values to a list of int | float | str
 
     Args:
         line (str): Line string
 
     Returns:
-        List[float]: Output list of floats.
+        List[int | float | str]: Outputs list of ints, floats, str, whichever datatype mathes the list best.
     """
-    return [float(number) for number in line.strip().split()]
+    return [parse(val) for val in line.strip().split()]
 
 
 with open(input_path, encoding="utf-8") as f:
