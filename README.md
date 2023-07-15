@@ -33,25 +33,29 @@ To configure the general behaiviour of all scripts that currently exist and migh
 
 ```toml
 t0 = 0
-t_final = 784035.0
+t_final = 789390.0
 initial_alpha = 1e-8
 n_terms_taylor = 1
 csv_delimiter = "\t"
 
 [param_finder_props]
-d_min = 2
-g_min = 1
+d_min = 0.5
+g_min = 0.4
 mu_min = 0
 
-d_max = 2.0000000002
-g_max = 1.00000002
+d_max = 12.0000000002
+g_max = 2.50000002
 mu_max = 5
 
 g_ini = 1.000000001
 d_ini = 2.0000000001
-mu_ini = 1.3392259274139547e-06
-shift_time = 0
-plot_graphs_matplotlib = 0
+mu_ini = 1.3301409949454641e-06
+shift_time = 7200
+plot_graphs_matplotlib = 1
+
+[param_finder_props.filters]
+alpha_min = 0
+alpha_max = 1
 
 [time_offset_finder_proprs]
 fit_procedure = "nlsq"
