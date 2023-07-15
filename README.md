@@ -29,32 +29,32 @@ Wait for the installation of all libraries to finish.
 
 ### Configuration
 
-To configure the general behaiviour of all scripts that currently exist and might be developed in the future, please use the `config.json` file available in the repo. It's general structure should look something like this:
+To configure the general behaiviour of all scripts that currently exist and might be developed in the future, please use the `config.toml` file available in the repo. It's general structure should look something like this:
 
 ```json
-{
-  "t0": 0.0,
-  "t_final": 1.2,
-  "initial_alpha": 1e-14,
-  "n_terms_taylor": 1,
-  "csv_delimiter": "\t",
-  "param_finder_props": {
-    "d_min": 0,
-    "g_min": 0.5,
-    "mu_min": 0.0,
+t0 = 0
+t_final = 784035.0
+initial_alpha = 1e-8
+n_terms_taylor = 1
+csv_delimiter = "\t"
 
-    "d_max": 3,
-    "g_max": 2.5,
-    "mu_max": 2,
+[param_finder_props]
+d_min = 2
+g_min = 1
+mu_min = 0
 
-    "g_ini": 1,
-    "d_ini": 2,
-    "mu_ini": 0.5,
+d_max = 2.0000000002
+g_max = 1.00000002
+mu_max = 5
 
-    "shift_time": 0
+g_ini = 1.000000001
+d_ini = 2.0000000001
+mu_ini = 1.3392259274139547e-06
+shift_time = 0
+plot_graphs_matplotlib = 0
 
-  }
-}
+[time_offset_finder_proprs]
+fit_procedure = "nlsq"
 ```
 
 `t0` и `t_final` set the integration interval for the numerical integrator.
