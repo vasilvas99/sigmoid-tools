@@ -31,7 +31,7 @@ Wait for the installation of all libraries to finish.
 
 To configure the general behaiviour of all scripts that currently exist and might be developed in the future, please use the `config.toml` file available in the repo. It's general structure should look something like this:
 
-```json
+```toml
 t0 = 0
 t_final = 784035.0
 initial_alpha = 1e-8
