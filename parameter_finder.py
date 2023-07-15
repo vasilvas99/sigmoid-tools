@@ -12,6 +12,8 @@ from sigmoid_calculation import get_sigmoid
 
 FINDER_CONFIG = SIGMOID_CONFIG["param_finder_props"]
 
+ALPHA_MIN = FINDER_CONFIG["filters"]["alpha_min"]
+ALPHA_MAX = FINDER_CONFIG["filters"]["alpha_max"]
 
 def filter_data(data):
     # filter data to stay within interpolation bounds
@@ -19,7 +21,9 @@ def filter_data(data):
         data[:,0] = data[:,0] - np.min(data[:,0])
     data = data[data[:, 0] >= SIGMOID_CONFIG["t0"]]
     data = data[data[:, 0] <= SIGMOID_CONFIG["t_final"]]
-    return data
+
+    mask = (data[:, 1] >= ALPHA_MIN) & (data[:, 1] <= ALPHA_MAX)
+    return data[mask]
 
 
 def read_data_csv(path: pathlib.Path):

@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from typing import Tuple
 from warnings import warn
-basepath = Path(os.path.dirname(__file__))
+basepath = Path(os.path.dirname(__file__)).resolve(True)
 
 JSON_T = "json"
 TOML_T = "toml"
