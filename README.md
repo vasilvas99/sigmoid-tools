@@ -79,7 +79,6 @@ There is now a script `autorun.py` that automates most of the configuration, exc
 
 3. Done.
 
-
 ### Parameter finder
 
 This script uses non-linear least squares to fit the best values for D and g for tab-separated dataset.
