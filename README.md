@@ -70,6 +70,16 @@ fit_procedure = "nlsq"
 
 ## Scripts 
 
+## Basic usage (with autorun.py)
+There is now a script `autorun.py` that automates most of the configuration, except for the bounds and initial conditions
+
+1. Go to the `config.toml` and set bounds for d,g, mu (= 1/ tau) and save the file.
+
+2. Run `python3 autorun.py <path_to_dataset.tsv>`
+
+3. Done.
+
+
 ### Parameter finder
 
 This script uses non-linear least squares to fit the best values for D and g for tab-separated dataset.
