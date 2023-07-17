@@ -19,11 +19,10 @@ try:
 except Exception as _:
     idx = "-"
 
-dataset = np.loadtxt(dataset_path)
-
 with open(config_toml, encoding="utf-8") as f:
     SIGMOID_CONFIG = tomlkit.load(f)
 
+dataset = np.loadtxt(dataset_path, delimiter=SIGMOID_CONFIG["csv_delimiter"])
 ts = dataset[:, 0]
 max_t = ts.max()
 
